@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopMeta — Coming Soon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0c0b10;
+            --surface: rgba(255,255,255,0.04);
+            --surface-hover: rgba(255,255,255,0.07);
+            --border: rgba(255,255,255,0.08);
+            --orange: #FF6B35;
+            --orange-glow: rgba(255,107,53,0.2);
+            --text: #F7F4EF;
+            --text-muted: rgba(247,244,239,0.5);
+            --text-subtle: rgba(247,244,239,0.28);
+            --radius: 16px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
+        .orb-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,107,53,0.16) 0%, transparent 68%);
+            top: -160px; right: -120px;
+            animation: floatA 14s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(120,60,255,0.13) 0%, transparent 68%);
+            bottom: 100px; left: -100px;
+            animation: floatB 18s ease-in-out infinite;
+        }
+        .orb-3 {
+            width: 320px; height: 320px;
+            background: radial-gradient(circle, rgba(255,200,80,0.09) 0%, transparent 68%);
+            top: 55%; left: 38%;
+            animation: floatC 22s ease-in-out infinite;
+        }
+        @keyframes floatA {
+            0%,100% { transform: translate(0,0); }
+            50%      { transform: translate(-50px,50px); }
+        }
+        @keyframes floatB {
+            0%,100% { transform: translate(0,0); }
+            50%      { transform: translate(60px,-40px); }
+        }
+        @keyframes floatC {
+            0%,100% { transform: translate(0,0); }
+            33%      { transform: translate(-30px,25px); }
+            66%      { transform: translate(25px,-45px); }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+            background-size: 72px 72px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 32px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
+        }
+
+        .logo-mark {
+            width: 38px; height: 38px;
+            background: var(--orange);
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+        }
+
+        .logo-mark svg {
+            width: 20px; height: 20px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .logo-name {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--text);
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 7px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .live-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--orange);
+            animation: blink 2.2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.4; transform: scale(0.75); }
+        }
+
+        .hero {
+            padding: 88px 0 64px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: up 0.7s ease 0.05s forwards;
+        }
+
+        .eyebrow::before, .eyebrow::after { content: '—'; opacity: 0.45; }
+
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(52px, 8.5vw, 100px);
+            line-height: 1.02;
+            letter-spacing: -2.5px;
+            color: var(--text);
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: up 0.7s ease 0.15s forwards;
+        }
+
+        .hero h1 .accent {
+            color: var(--orange);
+            font-style: italic;
+        }
+
+        .hero-sub {
+            max-width: 520px;
+            margin: 0 auto 56px;
+            font-size: 17px;
+            line-height: 1.8;
+            color: var(--text-muted);
+            font-weight: 300;
+            opacity: 0;
+            animation: up 0.7s ease 0.25s forwards;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: up 0.7s ease 0.35s forwards;
+        }
+
+        .cd-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cd-box {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(44px, 6vw, 74px);
+            min-width: clamp(90px, 11vw, 130px);
+            text-align: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px 10px 14px;
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cd-box::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0; right: 0;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .cd-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-subtle);
+        }
+
+        .cd-sep {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(40px, 5vw, 64px);
+            color: var(--text-subtle);
+            line-height: 1;
+            padding-top: 18px;
+        }
+
+        .form-area {
+            max-width: 460px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: up 0.7s ease 0.45s forwards;
+        }
+
+        .form-shell {
+            display: flex;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .form-shell:focus-within { border-color: rgba(255,107,53,0.45); }
+
+        .form-shell input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            padding: 12px 14px;
+            font-size: 15px;
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .form-shell input::placeholder { color: var(--text-subtle); }
+
+        .form-shell button {
+            background: var(--orange);
+            color: #fff;
+            border: none;
+            border-radius: 9px;
+            padding: 12px 24px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .form-shell button:hover { background: #ff8050; transform: scale(1.03); }
+
+        .form-note {
+            margin-top: 14px;
+            font-size: 13px;
+            color: var(--text-subtle);
+            text-align: center;
+        }
+
+        .form-success {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #4ade80;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 16px;
+        }
+
+        .form-success.show { display: flex; animation: up 0.4s ease forwards; }
+
+        .marquee-wrap {
+            position: relative;
+            z-index: 1;
+            padding: 64px 0;
+            overflow: hidden;
+        }
+
+        .marquee-wrap::before,
+        .marquee-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 160px;
+            z-index: 2;
+        }
+
+        .marquee-wrap::before {
+            left: 0;
+            background: linear-gradient(to right, var(--bg) 30%, transparent);
+        }
+
+        .marquee-wrap::after {
+            right: 0;
+            background: linear-gradient(to left, var(--bg) 30%, transparent);
+        }
+
+        .marquee-line {
+            display: flex;
+            gap: 14px;
+            animation: ticker 28s linear infinite;
+            width: max-content;
+        }
+
+        .m-tag {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 9px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .m-tag .dot { color: var(--orange); font-size: 18px; line-height: 1; }
+
+        @keyframes ticker {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        .features-section {
+            position: relative;
+            z-index: 1;
+            padding: 16px 0 100px;
+        }
+
+        .sec-eyebrow {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 14px;
+        }
+
+        .sec-title {
+            text-align: center;
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(26px, 4vw, 40px);
+            margin-bottom: 52px;
+            letter-spacing: -0.5px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 36px 30px;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            background: radial-gradient(circle at top left, var(--orange-glow), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover { border-color: rgba(255,107,53,0.3); transform: translateY(-6px); }
+        .card:hover::before { opacity: 1; }
+
+        .card-num {
+            font-family: 'DM Serif Display', serif;
+            font-size: 52px;
+            color: rgba(255,107,53,0.12);
+            line-height: 1;
+            margin-bottom: 18px;
+        }
+
+        .card-ico {
+            width: 46px; height: 46px;
+            background: rgba(255,107,53,0.1);
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 22px;
+        }
+
+        .card-ico svg {
+            width: 22px; height: 22px;
+            stroke: var(--orange);
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.75;
+            font-weight: 300;
+        }
+
+        .footer-line {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border);
+            padding: 28px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-line p { font-size: 13px; color: var(--text-subtle); }
+
+        .footer-links { display: flex; gap: 20px; }
+
+        .footer-links a {
+            font-size: 13px;
+            color: var(--text-subtle);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--orange); }
+
+        @keyframes up {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 720px) {
+            .cards { grid-template-columns: 1fr; }
+            .countdown { gap: 6px; }
+            .cd-sep { font-size: 36px; padding-top: 12px; }
+            .cd-box { min-width: 66px; font-size: 38px; padding: 12px 6px 10px; border-radius: 10px; }
+            .hero { padding: 56px 0 40px; }
+            nav { flex-direction: column; gap: 16px; }
+            .footer-line { flex-direction: column; gap: 14px; text-align: center; }
+            .form-shell { flex-direction: column; }
+            .form-shell button { border-radius: 9px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="wrap">
+    <nav>
+        <a class="logo" href="#">
+            <div class="logo-mark">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="logo-name">ShopMeta</span>
+        </a>
+        <div class="status-pill">
+            <div class="live-dot"></div>
+            In development
+        </div>
+    </nav>
+</div>
+
+<section class="hero">
+    <div class="wrap">
+        <div class="eyebrow">AI-Powered Etsy Management</div>
+        <h1>Your Etsy Shop,<br><span class="accent">Infinitely Smarter</span></h1>
+        <p class="hero-sub">ShopMeta brings AI-driven analytics, intelligent metadata optimization, and automated supply chain management to every Etsy seller — all in one place.</p>
+
+        <div class="countdown">
+            <div class="cd-unit">
+                <div class="cd-box" id="days">--</div>
+                <div class="cd-label">Days</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-unit">
+                <div class="cd-box" id="hours">--</div>
+                <div class="cd-label">Hours</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-unit">
+                <div class="cd-box" id="mins">--</div>
+                <div class="cd-label">Mins</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-unit">
+                <div class="cd-box" id="secs">--</div>
+                <div class="cd-label">Secs</div>
+            </div>
+        </div>
+
+        <div class="form-area">
+            <div class="form-shell">
+                <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email">
+                <button onclick="doSignup()">Notify Me</button>
+            </div>
+            <div class="form-success" id="successMsg">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                You're on the list — we'll be in touch soon!
+            </div>
+            <p class="form-note">No spam, ever. Unsubscribe any time.</p>
+        </div>
+    </div>
+</section>
+
+<div class="marquee-wrap">
+    <div class="marquee-line">
+        <div class="m-tag"><span class="dot">◆</span> AI Analytics Dashboard</div>
+        <div class="m-tag"><span class="dot">◆</span> Metadata Optimizer</div>
+        <div class="m-tag"><span class="dot">◆</span> Supply Chain Automation</div>
+        <div class="m-tag"><span class="dot">◆</span> Smart Product Tagging</div>
+        <div class="m-tag"><span class="dot">◆</span> Listing SEO Optimizer</div>
+        <div class="m-tag"><span class="dot">◆</span> Sales Trend Detection</div>
+        <div class="m-tag"><span class="dot">◆</span> Inventory Management</div>
+        <div class="m-tag"><span class="dot">◆</span> AI Description Writer</div>
+        <div class="m-tag"><span class="dot">◆</span> AI Analytics Dashboard</div>
+        <div class="m-tag"><span class="dot">◆</span> Metadata Optimizer</div>
+        <div class="m-tag"><span class="dot">◆</span> Supply Chain Automation</div>
+        <div class="m-tag"><span class="dot">◆</span> Smart Product Tagging</div>
+        <div class="m-tag"><span class="dot">◆</span> Listing SEO Optimizer</div>
+        <div class="m-tag"><span class="dot">◆</span> Sales Trend Detection</div>
+        <div class="m-tag"><span class="dot">◆</span> Inventory Management</div>
+        <div class="m-tag"><span class="dot">◆</span> AI Description Writer</div>
+    </div>
+</div>
+
+<section class="features-section">
+    <div class="wrap">
+        <div class="sec-eyebrow">What's coming</div>
+        <div class="sec-title">Three tools. One platform.</div>
+        <div class="cards">
+            <div class="card">
+                <div class="card-num">01</div>
+                <div class="card-ico">
+                    <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <h3>AI Shop Analytics</h3>
+                <p>Understand your performance with intelligent dashboards that surface what sells, when it sells, and why customers choose you over competitors.</p>
+            </div>
+            <div class="card">
+                <div class="card-num">02</div>
+                <div class="card-ico">
+                    <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </div>
+                <h3>AI Metadata Optimizer</h3>
+                <p>Let AI rewrite your product titles, tags, and descriptions automatically for maximum Etsy search visibility and organic traffic.</p>
+            </div>
+            <div class="card">
+                <div class="card-num">03</div>
+                <div class="card-ico">
+                    <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <h3>Supply Chain Automation</h3>
+                <p>Automate inventory alerts, reorder workflows, and supplier coordination so you never lose a sale to a stock issue again.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="wrap">
+    <div class="footer-line">
+        <p>© 2026 ShopMeta. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    (function tick() {
+        const target = new Date('2026-09-01T00:00:00').getTime();
+        const diff = target - Date.now();
+        if (diff > 0) {
+            document.getElementById('days').textContent  = pad(Math.floor(diff / 86400000));
+            document.getElementById('hours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+            document.getElementById('mins').textContent  = pad(Math.floor((diff % 3600000) / 60000));
+            document.getElementById('secs').textContent  = pad(Math.floor((diff % 60000) / 1000));
+        } else {
+            ['days','hours','mins','secs'].forEach(id => document.getElementById(id).textContent = '00');
+        }
+        setTimeout(tick, 1000);
+    })();
+
+    function doSignup() {
+        const input = document.getElementById('emailInput');
+        const msg   = document.getElementById('successMsg');
+        const val   = input.value.trim();
+        if (!val || !val.includes('@') || !val.includes('.')) {
+            input.style.outline = '1px solid rgba(255,80,80,0.6)';
+            input.focus();
+            setTimeout(() => input.style.outline = '', 2000);
+            return;
+        }
+        msg.classList.add('show');
+        input.value = '';
+        input.placeholder = 'You\'re on the list ✓';
+        input.disabled = true;
+    }
+
+    document.getElementById('emailInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') doSignup();
+    });
+</script>
+</body>
+</html>
